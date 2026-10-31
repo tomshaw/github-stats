@@ -4,10 +4,10 @@
 https://github.community/t/support-theme-context-for-images-in-light-vs-dark-mode/147981/84
 -->
 <a href="https://github.com/jstrieb/github-stats">
-<img src="https://github.com/jstrieb/github-stats/blob/master/generated/overview.svg#gh-dark-mode-only" />
-<img src="https://github.com/jstrieb/github-stats/blob/master/generated/languages.svg#gh-dark-mode-only" />
-<img src="https://github.com/jstrieb/github-stats/blob/master/generated/overview.svg#gh-light-mode-only" />
-<img src="https://github.com/jstrieb/github-stats/blob/master/generated/languages.svg#gh-light-mode-only" />
+<img src="generated/overview.svg#gh-dark-mode-only" />
+<img src="generated/languages.svg#gh-dark-mode-only" />
+<img src="generated/overview.svg#gh-light-mode-only" />
+<img src="generated/languages.svg#gh-light-mode-only" />
 </a>
 
 Generate visualizations of GitHub user and repository statistics with GitHub
@@ -94,12 +94,12 @@ For more information on inaccuracies, see issue
    - To show statistics only for "owned" repositories and not forks with
      contributions, add an environment variable (under the `env` header in the
      [main
-     workflow](https://github.com/jstrieb/github-stats/blob/master/.github/workflows/main.yml))
+     workflow](.github/workflows/main.yml))
      called `EXCLUDE_FORKED_REPOS` with a value of `true`.
    - These other values are added as secrets by default to prevent leaking
      information about private repositories. If you're not worried about that,
      you can change the values directly [in the Actions workflow
-     itself](https://github.com/jstrieb/github-stats/blob/05de1314b870febd44d19ad2f55d5e59d83f5857/.github/workflows/main.yml#L48-L53).
+     itself](.github/workflows/main.yml).
 6. Go to the [Actions
    Page](../../actions?query=workflow%3A"Generate+Stats+Images") and press "Run
    Workflow" on the right side of the screen to generate images for the first
@@ -122,6 +122,24 @@ For more information on inaccuracies, see issue
 9. Link back to this repository so that others can generate their own
    statistics images.
 10. Star this repo if you like it!
+
+
+# Development
+
+The workflow runs on Python 3.14 with [`aiohttp`](https://docs.aiohttp.org/)
+as the only dependency. To generate the images locally:
+
+```sh
+python -m pip install -r requirements.txt
+ACCESS_TOKEN=<token> GITHUB_ACTOR=<username> python generate_images.py
+```
+
+Code is linted and formatted with [Ruff](https://docs.astral.sh/ruff/)
+(`ruff check . && ruff format .`), which also runs on every push and pull
+request. Dependabot keeps the pinned Actions and `aiohttp` up to date.
+
+If the workflow fails with a GraphQL or 401 error, the `ACCESS_TOKEN` secret
+has most likely expired and needs to be regenerated.
 
 
 # Support the Project
